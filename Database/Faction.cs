@@ -18,14 +18,14 @@ namespace Database
     /// </summary>
     class Faction
     {
-        public string _name;
+        public string name;
         
         /// <summary>
         /// Constructor to set base values for a Faction.
         /// </summary>
         public Faction(string aName)
         {
-            _name = aName;
+            name = aName;
         }
     }
 }
