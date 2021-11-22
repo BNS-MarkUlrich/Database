@@ -1,0 +1,14 @@
+C:\School\Database\bin\Debug\netcoreapp3.1\Database.exe
+C:\School\Database\bin\Debug\netcoreapp3.1\Database.deps.json
+C:\School\Database\bin\Debug\netcoreapp3.1\Database.runtimeconfig.json
+C:\School\Database\bin\Debug\netcoreapp3.1\Database.runtimeconfig.dev.json
+C:\School\Database\bin\Debug\netcoreapp3.1\Database.dll
+C:\School\Database\bin\Debug\netcoreapp3.1\Database.pdb
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.csproj.AssemblyReference.cache
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.AssemblyInfoInputs.cache
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.AssemblyInfo.cs
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.csproj.CoreCompileInputs.cache
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.dll
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.pdb
+C:\School\Database\obj\Debug\netcoreapp3.1\Database.genruntimeconfig.cache
