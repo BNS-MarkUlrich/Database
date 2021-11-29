@@ -12,3 +12,17 @@ C:\School\Database\obj\Debug\netcoreapp3.1\Database.csproj.CoreCompileInputs.cac
 C:\School\Database\obj\Debug\netcoreapp3.1\Database.dll
 C:\School\Database\obj\Debug\netcoreapp3.1\Database.pdb
 C:\School\Database\obj\Debug\netcoreapp3.1\Database.genruntimeconfig.cache
+C:\School\Database\Database\bin\Debug\netcoreapp3.1\Database.exe
+C:\School\Database\Database\bin\Debug\netcoreapp3.1\Database.deps.json
+C:\School\Database\Database\bin\Debug\netcoreapp3.1\Database.runtimeconfig.json
+C:\School\Database\Database\bin\Debug\netcoreapp3.1\Database.runtimeconfig.dev.json
+C:\School\Database\Database\bin\Debug\netcoreapp3.1\Database.dll
+C:\School\Database\Database\bin\Debug\netcoreapp3.1\Database.pdb
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.csproj.AssemblyReference.cache
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.AssemblyInfoInputs.cache
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.AssemblyInfo.cs
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.csproj.CoreCompileInputs.cache
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.dll
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.pdb
+C:\School\Database\Database\obj\Debug\netcoreapp3.1\Database.genruntimeconfig.cache

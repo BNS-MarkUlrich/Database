@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Database
 {
-    class Database
+    public class Database
     {
         private List<Faction> _factions;
 

@@ -1,0 +1,21 @@
+﻿Convention:
+	! = Necessary
+	* = Optional
+
+
+Faction variables:
+	! Appearance
+	! Name
+		! Name
+		* Plural
+		* Adjective
+	* Description
+	! Traits
+	* Ruler
+		! Name
+		* Gender
+	* Homeworld
+	* Government
+	* Empire Name
+	* Playable
+	* Non-Playable
