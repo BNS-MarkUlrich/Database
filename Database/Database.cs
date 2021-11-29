@@ -18,28 +18,28 @@ namespace Database
     /// </summary>
     public class Database
     {
-        private List<Faction> _factions;
+        private List<Faction> factions;
 
         /// <summary>
         /// Instantiates a new list of Factions.
         /// </summary>
         public Database()
         {
-            _factions = new List<Faction>();
+            factions = new List<Faction>();
         }
 
         /// <summary>
         /// Allows you to add new Factions to the list.
         /// </summary>
-        public void AddItem(Faction faction)
+        public void AddItem(Faction aFaction)
         {
-            _factions.Add(faction);
+            factions.Add(aFaction);
         }
 
         /// <returns>All items in the list.</returns>
         public Faction[] GetAllItems()
         {
-            return _factions.ToArray();
+            return factions.ToArray();
         }
     }
 }
