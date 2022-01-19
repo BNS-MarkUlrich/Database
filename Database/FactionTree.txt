@@ -1,0 +1,50 @@
+﻿--- Type Locked ---
+Faction Tree:
+1. Imperialist
+	Ethic: Militarist
+2. Xenoist
+	Ethic: Xenophile
+3. Technologist
+	Ethic: Materialist
+
+
+--- Global ---
+Appearances: (Required)
+1. Humanoid
+2. Avian
+3. Machine
+
+Name:
+- Species (Required)
+- Empire (Optional)
+	*Player Input*
+	OR
+	"Empire of the " + Species Name
+
+Homeworld:
+- Type: (Required)
+	1. Continental
+	2. Arid
+	3. Ocean
+- Name: (Optional)
+	*Player Input*
+	OR
+	"Home of the " + Species Name
+
+Description: (Optional)
+*Player Input*
+OR
+*Empty*
+
+--- Extra, Global ---
+Traits: (2 points, 5 picks)
+- Biological
+	1. Adaptive -2 / Nonadaptive +2
+	2. Charismatic -2 / Repugnant +2
+	3. Quick Learners -1 / Slow Learners +1
+OR
+- Machine
+	1. Machine 0
+	2. Durable -1 / High Maintenance +1
+	3. Mass-Produced -1 / Custom-Made +1
+	4. Learning Algorithms -1 / Repurposed Hardware + 1

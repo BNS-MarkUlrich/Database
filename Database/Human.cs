@@ -18,9 +18,9 @@ namespace Database
         public override void GetUniqueProperties()
         {
             //throw new NotImplementedException();
-            description = "description";
-            _homeWorld = "Earth";
-            empireName = "Galactic Union of Humanity";
+            //description = "description";
+            //_homeWorld = "Earth";
+            //empireName = "Galactic Union of Humanity";
 
             Console.WriteLine("Description: {0}", description);
             Console.WriteLine("Homeworld: {0}", _homeWorld);

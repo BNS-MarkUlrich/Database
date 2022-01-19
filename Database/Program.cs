@@ -9,15 +9,14 @@ namespace Database
         static void Main()
         {
             Database database = new Database();
-            Faction human = new Human("Humanoid", "Human");
+            //Faction human = new Human("Humanoid", "Human");
             //Faction borg = new Faction("Borg");
             //database.AddItem(borg);
-            database.AddItem(human);
+            //database.AddItem(human);
+            Homeworld earth = new Homeworld();
 
             foreach(Faction f in database.GetAllItems())
             {
-                Console.WriteLine("Appearance: {0}", f._appearance);
-                Console.WriteLine("Name: {0}", f.name);
                 f.GetUniqueProperties();
             }
 

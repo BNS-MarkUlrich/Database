@@ -19,7 +19,8 @@ namespace Database
     public abstract class Faction
     {
         public string _appearance { get; private set; }
-        public string name { get; private set; }
+        public string speciesName { get; private set; }
+        public string empireName { get; private set; }
 
         /// <summary>
         /// Constructor to set base values for a Faction.
@@ -27,7 +28,7 @@ namespace Database
         public Faction(string anAppearance, string aName)
         {
             this._appearance = anAppearance;
-            this.name = aName;
+            this.speciesName = aName;
         }
 
         public abstract void GetUniqueProperties();
