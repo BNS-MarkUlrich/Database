@@ -28,10 +28,10 @@ namespace Database
 
         public abstract void CreateFaction();
 
-        /*public BaseFaction(FactionTypes thisFactionType)
+        public BaseFaction(FactionTypes thisFactionType)
         {
             _factionType = thisFactionType;
-        }*/
+        }
 
         public enum FactionTypes
         {

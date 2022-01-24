@@ -8,7 +8,7 @@ namespace Database
     {
         private MainMenus _mainMenu;
         private FactionCreatorMenus _createFactionMenu;
-        private FactionNameMenus _setFactionMenu;
+        private FactionNameMenus _setFactionNamesMenu;
         private HomeWorldMenus _setHomeWorldMenu;
         private DatabaseMenus _databaseMenu;
 
@@ -17,25 +17,25 @@ namespace Database
 
         public MainMenu()
         {
-            StartMenu();
+            StartUpMenu();
         }
 
-        public void StartMenu()
+        public void StartUpMenu()
         {
             Console.WriteLine("Welcome to Mark's Faction Database!");
             Console.WriteLine("\nPress (SPACE) to Continue...");
             if (Console.ReadKey().Key == ConsoleKey.Spacebar)
             {
-                SetUpMainMenu();
+                StartMenus();
             }
             else
             {
                 Console.Clear();
-                StartMenu();
+                StartUpMenu();
             }
         }
 
-        public void SetUpMainMenu()
+        public void StartMenus()
         {
             Console.Clear();
             Console.WriteLine("\n---Main Menu--- \n 1. Create Faction \n 2. Access Database \n 3. Exit Program");
@@ -44,32 +44,32 @@ namespace Database
             if (consoleInput == "1" || consoleInput.ToLower() == "Create Faction")
             {
                 _mainMenu = MainMenus.FactionCreationMenu;
-                CreateFactionMenu();
+                MainMenuFunc();
             }
             else if (consoleInput == "2" || consoleInput.ToLower() == "Access Database")
             {
                 _mainMenu = MainMenus.FactionDatabaseMenu;
-                CreateFactionMenu();
+                MainMenuFunc();
             }
             else if (consoleInput == "3" || consoleInput.ToLower() == "Exit Program")
             {
                 _mainMenu = MainMenus.ExitProgramMenu;
-                CreateFactionMenu();
+                MainMenuFunc();
             }
             else
             {
                 Console.WriteLine("Invalid Input");
-                SetUpMainMenu();
+                StartMenus();
             }
         }
 
-        public void CreateFactionMenu()
+        public void MainMenuFunc()
         {
             switch (_mainMenu)
             {
                 case MainMenus.FactionCreationMenu:
                     Console.Clear();
-                    Console.Write("\n---Faction Creator Menu--- \n1.Set Faction Type \n2.Set Appearance Type \n3. Set Faction Names \n4. Set HomeWorld \n5. Set Description \n6. Save Faction \n7. Back To Main Menu \nChoose Option: ");
+                    Console.Write("\n---Faction Creator Menu--- \n1. Set Faction Type \n2. Set Appearance Type \n3. Set Faction Names \n4. Set HomeWorld \n5. Set Description \n6. Save Faction \n7. Back To Main Menu \nChoose Option: ");
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
@@ -82,6 +82,7 @@ namespace Database
                     else if (consoleInput == "3")
                     {
                         _createFactionMenu = FactionCreatorMenus.SetFactionNameMenu;
+                        FactionCreationMenu();
                     }
                     else if (consoleInput == "4")
                     {
@@ -97,12 +98,58 @@ namespace Database
                     }
                     else if (consoleInput == "7")
                     {
-                        SetUpMainMenu();
+                        StartMenus();
+                    }
+                    else
+                    {
+                        MainMenuFunc();
                     }
                     break;
                 case MainMenus.FactionDatabaseMenu:
                     break;
                 case MainMenus.ExitProgramMenu:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void FactionCreationMenu()
+        {
+            switch (_createFactionMenu)
+            {
+                case FactionCreatorMenus.SetFactionTypeMenu:
+                    break;
+                case FactionCreatorMenus.SetAppearanceTypeMenu:
+                    break;
+                case FactionCreatorMenus.SetFactionNameMenu:
+                    Console.Clear();
+                    Console.Write("\n---Faction Names Menu--- \n1. Set Species Name \n2. Set Empire Name \n3. Back To Faction Creation Menus \nChoose Option: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        _setFactionNamesMenu = FactionNameMenus.SetSpeciesNameMenu;
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        _setFactionNamesMenu = FactionNameMenus.SetEmpireNameMenu;
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        FactionCreationMenu();
+                    }
+                    break;
+                case FactionCreatorMenus.SetHomeWorldMenu:
+                    break;
+                case FactionCreatorMenus.SetDescriptionMenu:
+                    break;
+                case FactionCreatorMenus.SaveFactionMenu:
+                    break;
+                case FactionCreatorMenus.BackToCreatorMenu:
                     break;
                 default:
                     break;
