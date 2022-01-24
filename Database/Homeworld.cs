@@ -6,7 +6,7 @@ namespace Database
 {
     public class Homeworld : Faction
     {
-        public Homeworld()
+        public Homeworld(FactionTypes thisFactionType) : base(thisFactionType)
         {
             ChooseHomeWorldType();
         }

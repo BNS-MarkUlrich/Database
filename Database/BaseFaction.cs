@@ -18,13 +18,13 @@ namespace Database
     /// </summary>
     public abstract class BaseFaction
     {
-        public FactionTypes _factionType { get; protected set; }
-        public Appearance _appearance { get; protected set; }
-        public string _speciesName { get; protected set; }
-        public string _empireName { get; protected set; }
-        public string homeWorldType { get; protected set; }
-        public string homeWorldName { get; protected set; }
-        public string _description { get; protected set; }
+        public FactionTypes _factionType;// { get; protected set; }
+        public Appearance _appearance;// { get; protected set; }
+        public string _speciesName;// { get; protected set; }
+        public string _empireName;// { get; protected set; }
+        public string homeWorldType;// { get; protected set; }
+        public string homeWorldName;// { get; protected set; }
+        public string _description;// { get; protected set; }
 
         public abstract void CreateFaction();
 

@@ -7,6 +7,11 @@ namespace Database
     public class Faction : BaseFaction
     {
         private string _console;
+
+        public Faction(FactionTypes thisFactionType) : base (thisFactionType)
+        {
+
+        }
         public override void CreateFaction()
         {
             Console.WriteLine("---Faction Creator---\n1. Militarist\n2. Xenophile\n3. Materialist");
