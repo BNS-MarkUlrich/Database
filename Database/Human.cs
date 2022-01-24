@@ -10,12 +10,7 @@ namespace Database
         private string _homeWorld;
         private string empireName;
 
-        public Human(string anAppearance, string name) : base(anAppearance, name)
-        {
-
-        }
-
-        public override void GetUniqueProperties()
+        public void GetUniqueProperties()
         {
             //throw new NotImplementedException();
             //description = "description";

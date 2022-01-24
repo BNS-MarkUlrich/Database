@@ -4,33 +4,31 @@ using System.Text;
 
 namespace Database
 {
-    /// <summary>
-    /// Base class for all Factions.
-    ///     <para>
-    ///         <description>Member Variables:</description>
-    ///     </para>
-    ///     <list type="bullet">
-    ///         <item>
-    ///             <term>_name</term>
-    ///             <description>Name of the Faction</description>
-    ///         </item>
-    ///     </list>
-    /// </summary>
-    public abstract class Faction
+    public class Faction : BaseFaction
     {
-        public string _appearance { get; private set; }
-        public string speciesName { get; private set; }
-        public string empireName { get; private set; }
-
-        /// <summary>
-        /// Constructor to set base values for a Faction.
-        /// </summary>
-        public Faction(string anAppearance, string aName)
+        private string _console;
+        public override void CreateFaction()
         {
-            this._appearance = anAppearance;
-            this.speciesName = aName;
+            Console.WriteLine("---Faction Creator---\n1. Militarist\n2. Xenophile\n3. Materialist");
+            Console.Write("Choose Faction Type: ");
+            _console = Console.ReadLine();
+            if (_console == "1" || _console.ToLower() == "militarist")
+            {
+                _factionType = FactionTypes.IMPERIALIST;
+            }
+            else if (_console == "2" || _console.ToLower() == "xenophile")
+            {
+                _factionType = FactionTypes.XENOIST;
+            }
+            else if (_console == "3" || _console.ToLower() == "materialist")
+            {
+                _factionType = FactionTypes.TECHNOLOGIST;
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
+                CreateFaction();
+            }
         }
-
-        public abstract void GetUniqueProperties();
     }
 }

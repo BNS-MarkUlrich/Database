@@ -8,19 +8,28 @@ namespace Database
     {
         static void Main()
         {
-            Database database = new Database();
-            //Faction human = new Human("Humanoid", "Human");
-            //Faction borg = new Faction("Borg");
-            //database.AddItem(borg);
-            //database.AddItem(human);
-            Homeworld earth = new Homeworld();
+            MainMenu mainMenu = new MainMenu();
+            /*Database database = new Database();
+            
+            Homeworld homeworld = new Homeworld();
+            //homeworld.ChooseHomeWorldType();
 
-            foreach(Faction f in database.GetAllItems())
+            Faction faction = new Faction();
+            faction.CreateFaction();
+            database.AddFaction(faction);
+
+            foreach (Faction f in database.GetAllItems())
             {
-                f.GetUniqueProperties();
+                //Console.WriteLine(faction._empireName.ToString());
+                //Console.WriteLine(faction._speciesName.ToString());
+                //Console.WriteLine(faction._appearance.ToString());
+                Console.WriteLine(f._factionType.ToString());
+                //Console.WriteLine(f.homeWorldType);
+                Console.WriteLine(f.homeWorldName);
+                //Console.WriteLine(faction._description.ToString());
             }
 
-            database.GetAllItems();
+            //database.GetAllItems();*/
         }
     }
 }

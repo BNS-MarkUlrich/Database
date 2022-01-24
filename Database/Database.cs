@@ -31,7 +31,7 @@ namespace Database
         /// <summary>
         /// Allows you to add new Factions to the list.
         /// </summary>
-        public void AddItem(Faction aFaction)
+        public void AddFaction(Faction aFaction)
         {
             factions.Add(aFaction);
         }

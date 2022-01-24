@@ -4,11 +4,8 @@ using System.Text;
 
 namespace Database
 {
-    public class Homeworld
+    public class Homeworld : Faction
     {
-        public string homeWorldType { get; private set; }
-        public string homeWorldName { get; private set; }
-
         public Homeworld()
         {
             ChooseHomeWorldType();
@@ -16,7 +13,8 @@ namespace Database
 
         public void ChooseHomeWorldType()
         {
-            Console.WriteLine("Choose Homeworld Type: \n1. Continental\n2. Arid\n3. Ocean");
+            Console.WriteLine("---HomeWorld Creator---\n1. Continental\n2. Arid\n3. Ocean");
+            Console.Write("Choose Homeworld Type: ");
             homeWorldType = Console.ReadLine();
             if (homeWorldType == "1" || homeWorldType.ToLower() == "continental")
             {
@@ -41,11 +39,11 @@ namespace Database
         }
         public void ChooseHomeWorldName()
         {
-            Console.WriteLine("Choose Homeworld Name: ");
+            Console.Write("Choose Homeworld Name: ");
             homeWorldName = Console.ReadLine();
             if (homeWorldName == "")
             {
-                Console.WriteLine("Home of the " + "Human");
+                homeWorldName = "Home of the " + _speciesName;
             }
         }
     }

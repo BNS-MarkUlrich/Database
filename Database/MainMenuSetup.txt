@@ -1,0 +1,26 @@
+﻿Main Menu:
+1. Create Faction : CreateFactionMenu();
+	1. Set Faction Type : CreateFaction();
+	2. Set Appearance Type : SetAppearanceType();
+	3. Set Faction Name : FactionNameMenu();
+		1. Set Species Name : SetSpeciesName();
+		2. Set Empire Name : SetEmpireName();
+		3. Back : CreateFactionMenu();
+	4. Set HomeWorld : SetHomeWorldMenu();
+		1. Set HomeWorld Type : SetHomeWorldType();
+		2. Set HomeWorld Name : SetHomeWorldName();
+		3. Back : CreateFactionMenu();
+	5. Set Description : SetDescription();
+	6. Save : Add _currentFaction to list _factions
+	7. Back : MainMenu;
+2. Get All Factions : GetAllFactions(); // _factions list, let user choose in list
+	1. Add Filter : AddSearchFilter(aSearchFilter); // Display list of factions that meet filter
+		1. [Insert Species Name]
+		2. [Insert Species Name]
+		3. Back : GetAllFactions();
+	2. Back : MainMenu();
+	3. [Insert Species Name] : // Set _currentFaction to selection and then go to CreateFactionMenu() where it auto fills already filled in info
+	4. [Insert Species Name]
+	5. [Insert Species Name]
+3. Exit Program : ExitProgram();
+
