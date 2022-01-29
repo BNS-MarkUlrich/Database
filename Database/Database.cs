@@ -36,6 +36,11 @@ namespace Database
             factions.Add(aFaction);
         }
 
+        public void RemoveFaction(Faction aFaction)
+        {
+            factions.Remove(aFaction);
+        }
+
         /// <returns>All items in the list.</returns>
         public Faction[] GetAllItems()
         {

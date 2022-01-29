@@ -8,7 +8,8 @@ namespace Database
     {
         static void Main()
         {
-            MainMenu mainMenu = new MainMenu();
+            Core programCore = new Core();
+            programCore.InstantiateCore();
             /*Database database = new Database();
             
             Homeworld homeworld = new Homeworld();

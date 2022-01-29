@@ -26,6 +26,8 @@ Homeworld:
 	1. Continental
 	2. Arid
 	3. Ocean
+	4. Ecumenopolis World (City World)
+	5. Machine (Machine Appearance required *optional)
 - Name: (Optional)
 	*Player Input*
 	OR

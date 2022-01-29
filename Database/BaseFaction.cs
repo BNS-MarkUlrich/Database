@@ -19,25 +19,43 @@ namespace Database
     public abstract class BaseFaction
     {
         public FactionTypes _factionType;// { get; protected set; }
-        public Appearance _appearance;// { get; protected set; }
+        public string _appearance;// { get; protected set; }
         public string _speciesName;// { get; protected set; }
         public string _empireName;// { get; protected set; }
         public string homeWorldType;// { get; protected set; }
         public string homeWorldName;// { get; protected set; }
         public string _description;// { get; protected set; }
 
-        public abstract void CreateFaction();
+        public abstract void SetFactionType(FactionTypes aFactionType);
+        public abstract FactionTypes GetFactionType();
+        public abstract void SetAppearance(string anAppearance);
+        public abstract string GetAppearance();
+        public abstract void SetSpeciesName(string aSpeciesName);
+        public abstract string GetSpeciesName();
+        public abstract void SetEmpireName(string anEmpireName);
+        public abstract string GetEmpireName();
+        public abstract void SetHomeWorldType(string aHomeWorldType);
+        public abstract string GetHomeWorldType();
+        public abstract void SetHomeWorldName(string aHomeWorldName);
+        public abstract string GetHomeWorldName();
+        public abstract void SetDescription(string aDescription);
+        public abstract string GetDescription();
 
-        public BaseFaction(FactionTypes thisFactionType)
-        {
-            _factionType = thisFactionType;
-        }
+        public abstract void GetAllFactionInfo();
 
         public enum FactionTypes
         {
-            IMPERIALIST,
-            XENOIST,
-            TECHNOLOGIST
+            Empty,
+            Imperialist,
+            Xenoist,
+            Technologist
+        }
+        public enum Appearances
+        {
+            Humanoid,
+            Avian,
+            Machine,
+            Empty
         }
     }
 }

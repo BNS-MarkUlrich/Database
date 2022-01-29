@@ -4,24 +4,31 @@ using System.Text;
 
 namespace Database
 {
-    public class MainMenu
+    public class MainMenu : Core
     {
         private MainMenus _mainMenu;
         private FactionCreatorMenus _createFactionMenu;
         private FactionNameMenus _setFactionNamesMenu;
         private HomeWorldMenus _setHomeWorldMenu;
-        private DatabaseMenus _databaseMenu;
+        private DatabaseMenus _setDatabaseMenu;
 
         private Database database;
-        private string consoleInput;
+        private Faction currentFaction;
 
-        public MainMenu()
+        private bool editing;
+
+        private string consoleInput;
+        private string savedConsoleInput;
+
+        public MainMenu(Database coreDatabase)
         {
+            database = coreDatabase;
             StartUpMenu();
         }
 
         public void StartUpMenu()
         {
+            Console.Title = "Mark's Faction Database";
             Console.WriteLine("Welcome to Mark's Faction Database!");
             Console.WriteLine("\nPress (SPACE) to Continue...");
             if (Console.ReadKey().Key == ConsoleKey.Spacebar)
@@ -43,6 +50,7 @@ namespace Database
             consoleInput = Console.ReadLine();
             if (consoleInput == "1" || consoleInput.ToLower() == "Create Faction")
             {
+                currentFaction = new Faction();
                 _mainMenu = MainMenus.FactionCreationMenu;
                 MainMenuFunc();
             }
@@ -69,7 +77,8 @@ namespace Database
             {
                 case MainMenus.FactionCreationMenu:
                     Console.Clear();
-                    Console.Write("\n---Faction Creator Menu--- \n1. Set Faction Type \n2. Set Appearance Type \n3. Set Faction Names \n4. Set HomeWorld \n5. Set Description \n6. Save Faction \n7. Back To Main Menu \nChoose Option: ");
+                    currentFaction.GetAllFactionInfo();
+                    Console.Write("\n---Faction Editor--- \n1. Set Faction Type \n2. Set Appearance Type \n3. Set Faction Names \n4. Set HomeWorld \n5. Set Description \n6. Save Faction \n7. <--Back \nChoose Option: ");
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
@@ -112,29 +121,26 @@ namespace Database
                     break;
                 case MainMenus.FactionDatabaseMenu:
                     Console.Clear();
-                    database = new Database();
-                    Faction testFaction = new Faction(BaseFaction.FactionTypes.IMPERIALIST);
-                    Faction testFaction1 = new Faction(BaseFaction.FactionTypes.TECHNOLOGIST);
-                    testFaction._empireName = "Galactic Empire of Humanity";
-                    testFaction._speciesName = "Human";
-                    testFaction.homeWorldType = "Continental";
-                    testFaction.homeWorldName = "Earth";
-                    testFaction._description = "Humans rule.";
-                    testFaction1._empireName = "Test Empire1";
-                    database.AddFaction(testFaction);
-                    database.AddFaction(testFaction1);
+                    editing = false;
                     Console.Write("\n---Faction Database--- \n1. Add Filter \n2. Back To Main Menu\n");
                     int i = 0;
                     for (i = 0; i < database.GetAllItems().Length; i++)
                     {
-                        Console.WriteLine((i+3) + ". " + database.GetAllItems()[i]._empireName);
+                        if (database.GetAllItems()[i]._empireName == null)
+                        {
+                            Console.WriteLine((i + 3) + ". " + "Unnamed Emprire" + "(" + i + ")");
+                        }
+                        else
+                        {
+                            Console.WriteLine((i + 3) + ". " + database.GetAllItems()[i]._empireName);
+                        }
                     }
                     Console.Write("Choose Option: ");
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
-                        _databaseMenu = DatabaseMenus.AddFilterMenu;
-                        // Create Database Function
+                        _setDatabaseMenu = DatabaseMenus.DatabaseSearchEngine;
+                        DatabaseEngine();
                     }
                     else if (consoleInput == "2")
                     {
@@ -142,32 +148,21 @@ namespace Database
                     }
                     else if (Int32.Parse(consoleInput) >= 3)
                     {
+                        savedConsoleInput = consoleInput;
                         Console.Clear();
-                        Console.WriteLine("---" + database.GetAllItems()[Int32.Parse(consoleInput) - 3]._empireName + "---");
-                        Console.WriteLine("Species Name: " + database.GetAllItems()[Int32.Parse(consoleInput) - 3]._speciesName);
-                        //Console.WriteLine("Appearance Type: " + database.GetAllItems()[Int32.Parse(consoleInput)-3]._appearance.ToString());
-                        Console.WriteLine("Faction Type: " + database.GetAllItems()[Int32.Parse(consoleInput) - 3]._factionType.ToString());
-                        Console.WriteLine("World Type: " + database.GetAllItems()[Int32.Parse(consoleInput) - 3].homeWorldType);
-                        Console.WriteLine("World Name: " + database.GetAllItems()[Int32.Parse(consoleInput) - 3].homeWorldName);
-                        Console.WriteLine("Description: " + database.GetAllItems()[Int32.Parse(consoleInput) - 3]._description);
-                        Console.Write("\nGo Back To Database? y/n \n");
-                        consoleInput = Console.ReadLine();
-                        if (consoleInput == "y")
-                        {
-                            StartMenus();
-                        }
-                        else
-                        {
-                            StartMenus();
-                        }
+                        currentFaction = database.GetAllItems()[Int32.Parse(consoleInput) - 3];
+                        currentFaction.GetAllFactionInfo();
+                        _setDatabaseMenu = DatabaseMenus.FactionOptions;
+                        DatabaseEngine();
                     }
                     else
                     {
-                        StartMenus();
+                        // Reset back to start of Case
+                        MainMenuFunc(); // Delete Later
                     }
                     break;
                 case MainMenus.ExitProgramMenu:
-                    // Implement Exit
+                    Environment.Exit(0);
                     break;
                 default:
                     break;
@@ -179,22 +174,74 @@ namespace Database
             switch (_createFactionMenu)
             {
                 case FactionCreatorMenus.SetFactionTypeMenu:
-                    // Implement FactionType
+                    Console.Clear();
+                    Console.Write("\n---Faction Types Menu--- \n1. Imperialist \n2. Xenoist \n3. Technologist \n4. <--Back \nChoose Option: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        currentFaction.SetFactionType(BaseFaction.FactionTypes.Imperialist);
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        currentFaction.SetFactionType(BaseFaction.FactionTypes.Xenoist);
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        currentFaction.SetFactionType(BaseFaction.FactionTypes.Technologist);
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "4")
+                    {
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        FactionCreationMenu();
+                    }
                     break;
                 case FactionCreatorMenus.SetAppearanceTypeMenu:
-                    // Implement Appearance
+                    Console.Clear();
+                    Console.Write("\n---Appearances Menu--- \n1. Humanoid \n2. Avian \n3. Machine \n4. <--Back \nChoose Option: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        currentFaction.SetAppearance("Humanoid");
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        currentFaction.SetAppearance("Avian");
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        currentFaction.SetAppearance("Machine");
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "4")
+                    {
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        FactionCreationMenu();
+                    }
                     break;
                 case FactionCreatorMenus.SetFactionNameMenu:
                     Console.Clear();
-                    Console.Write("\n---Faction Names Menu--- \n1. Set Species Name \n2. Set Empire Name \n3. Back To Faction Creation Menus \nChoose Option: ");
+                    Console.Write("\n---Faction Names Menu--- \n1. Set Species Name \n2. Set Empire Name \n3. <--Back \nChoose Option: ");
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
                         _setFactionNamesMenu = FactionNameMenus.SetSpeciesNameMenu;
+                        SetFactionNames();
                     }
                     else if (consoleInput == "2")
                     {
                         _setFactionNamesMenu = FactionNameMenus.SetEmpireNameMenu;
+                        SetFactionNames();
                     }
                     else if (consoleInput == "3")
                     {
@@ -207,15 +254,17 @@ namespace Database
                     break;
                 case FactionCreatorMenus.SetHomeWorldMenu:
                     Console.Clear();
-                    Console.Write("\n---HomeWorld Menu--- \n1. Set HomeWorld Type \n2. Set HomeWorld Name \n3. Back To Faction Creation Menus \nChoose Option: ");
+                    Console.Write("\n---HomeWorld Menu--- \n1. Set HomeWorld Type \n2. Set HomeWorld Name \n3. <--Back \nChoose Option: ");
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
                         _setHomeWorldMenu = HomeWorldMenus.SetHomeWorldTypeMenu;
+                        SetHomeWorld();
                     }
                     else if (consoleInput == "2")
                     {
                         _setHomeWorldMenu = HomeWorldMenus.SetHomeWorldNameMenu;
+                        SetHomeWorld();
                     }
                     else if (consoleInput == "3")
                     {
@@ -227,10 +276,206 @@ namespace Database
                     }
                     break;
                 case FactionCreatorMenus.SetDescriptionMenu:
-                    // Implement Description
+                    Console.Clear();
+                    Console.Write("\n---Description Menu--- \n1. <--Back \nEnter Description: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        currentFaction.SetDescription(consoleInput);
+                        /*if (Console.ReadKey().Key == ConsoleKey.Enter)
+                        {
+
+                        }*/
+                        MainMenuFunc();
+                    }
                     break;
                 case FactionCreatorMenus.SaveFactionMenu:
-                    // Implement Save
+                    if (currentFaction.GetEmpireName() == null)
+                    {
+                        Console.WriteLine("Save Faction " + "Unnamed Empire" + "? y/n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Save Faction " + currentFaction.GetEmpireName() + "? y/n");
+                    }
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "y")
+                    {
+                        if (editing == false)
+                        {
+                            database.AddFaction(currentFaction);
+                            StartMenus();
+                        }
+                        else
+                        {
+                            StartMenus();
+                        }
+                    }
+                    else if (consoleInput == "n")
+                    {
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        FactionCreationMenu();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        public void SetFactionNames()
+        {
+            switch (_setFactionNamesMenu)
+            {
+                case FactionNameMenus.SetSpeciesNameMenu:
+                    Console.Clear();
+                    Console.Write("\n---Species Name Menu--- \n1. <--Back \nEnter Species Name: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        FactionCreationMenu();
+                    }
+                    else
+                    {
+                        currentFaction.SetSpeciesName(consoleInput);
+                        /*if (Console.ReadKey().Key == ConsoleKey.Enter)
+                        {
+
+                        }*/
+                        FactionCreationMenu();
+                    }
+                    break;
+                case FactionNameMenus.SetEmpireNameMenu:
+                    Console.Clear();
+                    Console.Write("\n---Empire Name Menu--- \n1. <--Back \nEnter Empire Name: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        FactionCreationMenu();
+                    }
+                    else
+                    {
+                        currentFaction.SetEmpireName(consoleInput);
+                        /*if (Console.ReadKey().Key == ConsoleKey.Enter)
+                        {
+
+                        }*/
+                        FactionCreationMenu();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void SetHomeWorld()
+        {
+            switch (_setHomeWorldMenu)
+            {
+                case HomeWorldMenus.SetHomeWorldTypeMenu:
+                    Console.Clear();
+                    Console.Write("\n---HomeWorld Type Menu--- \n1. Continental \n2. Arid \n3. Ocean \n4. Ecumenopolis World \n5. <--Back \nChoose HomeWorld Type: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        currentFaction.SetHomeWorldType("Continental");
+                        FactionCreationMenu();
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        currentFaction.SetHomeWorldType("Arid");
+                        FactionCreationMenu();
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        currentFaction.SetHomeWorldType("Ocean");
+                        FactionCreationMenu();
+                    }
+                    else if (consoleInput == "4")
+                    {
+                        currentFaction.SetHomeWorldType("Ecumenopolis");
+                        FactionCreationMenu();
+                    }
+                    else if (consoleInput == "5")
+                    {
+                        FactionCreationMenu();
+                    }
+                    else
+                    {
+                        SetHomeWorld();
+                    }
+                    break;
+                case HomeWorldMenus.SetHomeWorldNameMenu:
+                    Console.Clear();
+                    Console.Write("\n---HomeWorld Name Menu--- \n1. <--Back \nEnter HomeWorld Name: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        FactionCreationMenu();
+                    }
+                    else
+                    {
+                        currentFaction.SetHomeWorldName(consoleInput);
+                        /*if (Console.ReadKey().Key == ConsoleKey.Enter)
+                        {
+
+                        }*/
+                        FactionCreationMenu();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void DatabaseEngine()
+        {   
+            switch (_setDatabaseMenu)
+            {
+                case DatabaseMenus.DatabaseSearchEngine:
+                    // Implement DatabaseSearchEngine
+                    break;
+                case DatabaseMenus.FactionOptions:
+                    Console.Write("\n1. Edit Faction\n2. Remove Faction\n3. <--Back\nChoose Option: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        editing = true;
+                        _mainMenu = MainMenus.FactionCreationMenu;
+                        MainMenuFunc();
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        Console.Write("Are you sure? y/n\n");
+                        consoleInput = Console.ReadLine();
+                        if (consoleInput == "y")
+                        {
+                            database.RemoveFaction(currentFaction);
+                            MainMenuFunc();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            currentFaction = database.GetAllItems()[Int32.Parse(savedConsoleInput) - 3];
+                            currentFaction.GetAllFactionInfo();
+                            _setDatabaseMenu = DatabaseMenus.FactionOptions;
+                            DatabaseEngine();
+                        }
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        FactionCreationMenu();
+                    }
                     break;
                 default:
                     break;
@@ -265,10 +510,10 @@ namespace Database
             SetHomeWorldTypeMenu,
             SetHomeWorldNameMenu
         }
-
         public enum DatabaseMenus
         {
-            AddFilterMenu
+            DatabaseSearchEngine,
+            FactionOptions
         }
     }
 }
