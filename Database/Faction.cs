@@ -6,12 +6,6 @@ namespace Database
 {
     public class Faction : BaseFaction
     {
-        private string _console;
-
-        public Faction()
-        {
-            //_speciesName = speciesName;
-        }
 
         public override void SetAppearance(string anAppearance)
         {
@@ -93,19 +87,19 @@ namespace Database
             {
                 Console.WriteLine("\n---" + GetEmpireName() + "---");
             }
-            Console.WriteLine("Species Name: " + GetSpeciesName());
-            Console.WriteLine("Appearance Type: " + GetAppearance());
+            Console.WriteLine("Species Name    : " + GetSpeciesName());
+            Console.WriteLine("Appearance Type : " + GetAppearance());
             if (_factionType == FactionTypes.Empty)
             {
-                Console.WriteLine("Faction Type: ");
+                Console.WriteLine("Faction Type    : ");
             }
             else
             {
-                Console.WriteLine("Faction Type: " + GetFactionType());
+                Console.WriteLine("Faction Type    : " + GetFactionType());
             }
-            Console.WriteLine("World Type: " + GetHomeWorldType());
-            Console.WriteLine("World Name: " + GetHomeWorldName());
-            Console.WriteLine("Description: " + GetDescription());
+            Console.WriteLine("World Type      : " + GetHomeWorldType());
+            Console.WriteLine("World Name      : " + GetHomeWorldName());
+            Console.WriteLine("Description     : " + GetDescription());
         }
     }
 }

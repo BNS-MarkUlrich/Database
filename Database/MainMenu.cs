@@ -8,9 +8,10 @@ namespace Database
     {
         private MainMenus _mainMenu;
         private FactionCreatorMenus _createFactionMenu;
-        private FactionNameMenus _setFactionNamesMenu;
-        private HomeWorldMenus _setHomeWorldMenu;
-        private DatabaseMenus _setDatabaseMenu;
+        private FactionNameMenus _factionNamesMenus;
+        private HomeWorldMenus _homeWorldMenus;
+        private DatabaseMenus _databaseMenus;
+        private FilterMenus _filterMenus;
 
         private Database database;
         private Faction currentFaction;
@@ -122,24 +123,13 @@ namespace Database
                 case MainMenus.FactionDatabaseMenu:
                     Console.Clear();
                     editing = false;
-                    Console.Write("\n---Faction Database--- \n1. Add Filter \n2. Back To Main Menu\n");
-                    int i = 0;
-                    for (i = 0; i < database.GetAllItems().Length; i++)
-                    {
-                        if (database.GetAllItems()[i]._empireName == null)
-                        {
-                            Console.WriteLine((i + 3) + ". " + "Unnamed Emprire" + "(" + i + ")");
-                        }
-                        else
-                        {
-                            Console.WriteLine((i + 3) + ". " + database.GetAllItems()[i]._empireName);
-                        }
-                    }
-                    Console.Write("Choose Option: ");
+                    Console.Write("\n---Faction Database--- \n1. Search Engine \n2. <--Back\n\nFactions:\n");
+                    ListAllFactions(3);
+                    Console.Write("\nChoose Option: ");
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
-                        _setDatabaseMenu = DatabaseMenus.DatabaseSearchEngine;
+                        _databaseMenus = DatabaseMenus.DatabaseSearchEngine;
                         DatabaseEngine();
                     }
                     else if (consoleInput == "2")
@@ -150,9 +140,9 @@ namespace Database
                     {
                         savedConsoleInput = consoleInput;
                         Console.Clear();
-                        currentFaction = database.GetAllItems()[Int32.Parse(consoleInput) - 3];
+                        currentFaction = database.GetAllFactions()[Int32.Parse(consoleInput) - 3];
                         currentFaction.GetAllFactionInfo();
-                        _setDatabaseMenu = DatabaseMenus.FactionOptions;
+                        _databaseMenus = DatabaseMenus.FactionOptions;
                         DatabaseEngine();
                     }
                     else
@@ -235,12 +225,12 @@ namespace Database
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
-                        _setFactionNamesMenu = FactionNameMenus.SetSpeciesNameMenu;
+                        _factionNamesMenus = FactionNameMenus.SetSpeciesNameMenu;
                         SetFactionNames();
                     }
                     else if (consoleInput == "2")
                     {
-                        _setFactionNamesMenu = FactionNameMenus.SetEmpireNameMenu;
+                        _factionNamesMenus = FactionNameMenus.SetEmpireNameMenu;
                         SetFactionNames();
                     }
                     else if (consoleInput == "3")
@@ -258,12 +248,12 @@ namespace Database
                     consoleInput = Console.ReadLine();
                     if (consoleInput == "1")
                     {
-                        _setHomeWorldMenu = HomeWorldMenus.SetHomeWorldTypeMenu;
+                        _homeWorldMenus = HomeWorldMenus.SetHomeWorldTypeMenu;
                         SetHomeWorld();
                     }
                     else if (consoleInput == "2")
                     {
-                        _setHomeWorldMenu = HomeWorldMenus.SetHomeWorldNameMenu;
+                        _homeWorldMenus = HomeWorldMenus.SetHomeWorldNameMenu;
                         SetHomeWorld();
                     }
                     else if (consoleInput == "3")
@@ -331,7 +321,7 @@ namespace Database
         
         public void SetFactionNames()
         {
-            switch (_setFactionNamesMenu)
+            switch (_factionNamesMenus)
             {
                 case FactionNameMenus.SetSpeciesNameMenu:
                     Console.Clear();
@@ -376,7 +366,7 @@ namespace Database
 
         public void SetHomeWorld()
         {
-            switch (_setHomeWorldMenu)
+            switch (_homeWorldMenus)
             {
                 case HomeWorldMenus.SetHomeWorldTypeMenu:
                     Console.Clear();
@@ -436,10 +426,57 @@ namespace Database
 
         public void DatabaseEngine()
         {   
-            switch (_setDatabaseMenu)
+            switch (_databaseMenus)
             {
                 case DatabaseMenus.DatabaseSearchEngine:
-                    // Implement DatabaseSearchEngine
+                    Console.Clear();
+                    Console.WriteLine("\n---Database Search Engine---");
+                    ShowFilters();
+                    Console.Write("\n1. Filters\n2. Search\n3. Clear Filters\n4. <--Back\nChoose Option: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                        DatabaseEngine();
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        // Implement Search Results
+                        Console.Clear();
+                        Console.Write("\n---Showing Search Results---\n");
+                        ShowFilters();
+                        Console.Write("\n1. <--Back\n");
+                        ShowSearchResults();
+                        Console.Write("Choose Option: ");
+                        consoleInput = Console.ReadLine();
+                        if (Int32.Parse(consoleInput) >= 2)
+                        {
+                            savedConsoleInput = consoleInput;
+                            Console.Clear();
+                            currentFaction = database.GetAllFactions()[Int32.Parse(consoleInput) - 2];
+                            currentFaction.GetAllFactionInfo();
+                            _databaseMenus = DatabaseMenus.FactionOptions;
+                            DatabaseEngine();
+                        }
+                        else
+                        {
+                            DatabaseEngine();
+                        }
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        database.ClearFilters();
+                        DatabaseEngine();
+                    }
+                    else if (consoleInput == "4")
+                    {
+                        database.ClearFilters();
+                        MainMenuFunc();
+                    }
+                    else
+                    {
+                        DatabaseEngine();
+                    }
                     break;
                 case DatabaseMenus.FactionOptions:
                     Console.Write("\n1. Edit Faction\n2. Remove Faction\n3. <--Back\nChoose Option: ");
@@ -462,9 +499,9 @@ namespace Database
                         else
                         {
                             Console.Clear();
-                            currentFaction = database.GetAllItems()[Int32.Parse(savedConsoleInput) - 3];
+                            currentFaction = database.GetAllFactions()[Int32.Parse(savedConsoleInput) - 3];
                             currentFaction.GetAllFactionInfo();
-                            _setDatabaseMenu = DatabaseMenus.FactionOptions;
+                            _databaseMenus = DatabaseMenus.FactionOptions;
                             DatabaseEngine();
                         }
                     }
@@ -474,11 +511,470 @@ namespace Database
                     }
                     else
                     {
-                        FactionCreationMenu();
+                        DatabaseEngine();
+                    }
+                    break;
+                case DatabaseMenus.DatabaseSearchEngineFilters:
+                    Console.Clear();
+                    Console.WriteLine("\n---Filters Menu---");
+                    Console.Write("1. " + database.filterMenus[0] + "\n2. " + database.filterMenus[1] + "\n3. " + database.filterMenus[2] + "\n4. <--Back\nChoose Filter Type: ");
+                    consoleInput = Console.ReadLine();
+                    if (consoleInput == "1")
+                    {
+                        ChooseFactionTypeFilter();
+                    }
+                    else if (consoleInput == "2")
+                    {
+                        ChooseAppearanceTypeFilter();
+                    }
+                    else if (consoleInput == "3")
+                    {
+                        ChooseHomeWorldType();
+                    }
+                    else if (consoleInput == "4")
+                    {
+                        _databaseMenus = DatabaseMenus.DatabaseSearchEngine;
+                        DatabaseEngine();
+                    }
+                    else
+                    {
+                        DatabaseEngine();
                     }
                     break;
                 default:
                     break;
+            }
+        }
+
+        public void ListAllFactions(int startListNumberAtValue)
+        {
+            int i = 0;
+            for (i = 0; i < database.GetAllFactions().Length; i++)
+            {
+                ListFactionsInRange(startListNumberAtValue, i);
+            }
+        }
+
+        public void ListFactionsInRange(int startListNumberAtValue, int IndexNumber)
+        {
+            if (database.GetAllFactions()[IndexNumber]._empireName == null)
+            {
+                Console.WriteLine((IndexNumber + startListNumberAtValue) + ". " + "Unnamed Emprire" + "(" + IndexNumber + ")");
+            }
+            else
+            {
+                Console.WriteLine((IndexNumber + startListNumberAtValue) + ". " + database.GetAllFactions()[IndexNumber]._empireName);
+            }
+        }
+
+        public void ShowSearchResults()
+        {
+            int f = 0;
+            database.GetDatabaseFilters();
+            if (database.GetDatabaseFilters().Count >= 4)
+            {
+                foreach (Faction faction in database.GetAllFactions())
+                {
+                    for (int i = 1; i < database.GetDatabaseFilters().Count; i++)
+                    {
+                        bool containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        bool containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        bool containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        if (containtsFactionType)
+                        {
+                            if (++i < database.GetDatabaseFilters().Count)
+                            {
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            else
+                            {
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                            }
+                            if (containsAppearance)
+                            {
+                                if (++i < database.GetDatabaseFilters().Count)
+                                {
+                                    containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                                }
+                                else
+                                {
+                                    containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                                }
+                                if (containsHomeWorldType)
+                                {
+                                    if (faction._empireName == null)
+                                    {
+                                        Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                        f++;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                        f++;
+                                    }
+                                }
+                            }
+                        }
+                        else if (containsAppearance)
+                        {
+                            if (++i < database.GetDatabaseFilters().Count)
+                            {
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                                containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            else
+                            {
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                                containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            if (containtsFactionType && containsHomeWorldType)
+                            {
+                                if (faction._empireName == null)
+                                {
+                                    Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                    f++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                    f++;
+                                }
+                            }
+                        }
+                        else if (containsHomeWorldType)
+                        {
+                            if (++i < database.GetDatabaseFilters().Count)
+                            {
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            else
+                            {
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            if (containtsFactionType && containsAppearance)
+                            {
+                                if (faction._empireName == null)
+                                {
+                                    Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                    f++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                    f++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (database.GetDatabaseFilters().Count == 3)
+            {
+                foreach (Faction faction in database.GetAllFactions())
+                {
+                    for (int i = 1; i < database.GetDatabaseFilters().Count; i++)
+                    {
+                        bool containtsFactionType = database.GetDatabaseFilters().Contains(faction.GetFactionType().ToString());
+                        //bool containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        bool containsAppearance = database.GetDatabaseFilters().Contains(faction.GetAppearance().ToString());
+                        //bool containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        bool containsHomeWorldType = database.GetDatabaseFilters().Contains(faction.GetHomeWorldType().ToString());
+                        //bool containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        if (containtsFactionType)
+                        {
+                            if (++i < database.GetDatabaseFilters().Count)
+                            {
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                                containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            else
+                            {
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                                containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            if (containsAppearance || containsHomeWorldType)
+                            {
+                                if (faction._empireName == null)
+                                {
+                                    Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                    f++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                    f++;
+                                }
+                            }
+                        }
+                        else if (containsAppearance)
+                        {
+                            if (++i < database.GetDatabaseFilters().Count)
+                            {
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                                containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            else
+                            {
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                                containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            if (containtsFactionType || containsHomeWorldType)
+                            {
+                                if (faction._empireName == null)
+                                {
+                                    Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                    f++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                    f++;
+                                }
+                            }
+                        }
+                        else if (containsHomeWorldType)
+                        {
+                            if (++i < database.GetDatabaseFilters().Count)
+                            {
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            else
+                            {
+                                containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[--i]);
+                                containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                            }
+                            if (containtsFactionType || containsAppearance)
+                            {
+                                if (faction._empireName == null)
+                                {
+                                    Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                    f++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                    f++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (database.GetDatabaseFilters().Count == 2)
+            {
+                for (int i = 1; i < database.GetDatabaseFilters().Count; i++)
+                {
+                    foreach (Faction faction in database.GetAllFactions())
+                    {
+                        bool containtsFactionType = faction.GetFactionType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        bool containsAppearance = faction.GetAppearance().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        bool containsHomeWorldType = faction.GetHomeWorldType().ToString().Contains(database.GetDatabaseFilters()[i]);
+                        if (containtsFactionType || containsAppearance || containsHomeWorldType)
+                        {
+                            if (faction._empireName == null)
+                            {
+                                Console.WriteLine((f + 2) + ". " + "Unnamed Emprire" + "(" + f + ")");
+                                f++;
+                            }
+                            else
+                            {
+                                Console.WriteLine((f + 2) + ". " + faction._empireName);
+                                f++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void ShowFilters()
+        {
+            Console.Write("Current Filters: ");
+            if (database.GetDatabaseFilters().Count == 1)
+            {
+                Console.Write(database.GetDatabaseFilters()[0]);
+            }
+            else
+            {
+                for (int i = 1; i < database.GetDatabaseFilters().Count; i++)
+                {
+                    if (i < database.GetDatabaseFilters().Count - 1)
+                    {
+                        Console.Write(database.GetDatabaseFilters()[i] + " - ");
+                    }
+                    else
+                    {
+                        Console.Write(database.GetDatabaseFilters()[i]);
+                    }
+                }
+            }
+        }
+
+        public void ChooseFactionTypeFilter()
+        {
+            Console.Clear();
+            Console.WriteLine("\n---" + database.filterMenus[0] + "---");
+            for (int i = 0; i < database.factionTypeFilter.Count; i++)
+            {
+                if (database.factionTypeFilter[i].Contains(database.factionTypeFilter[i]))
+                {
+                    database.RemoveFilter(database.factionTypeFilter[i]);
+                }
+                Console.WriteLine(i + 1 + ". " + database.factionTypeFilter[i]);
+                if (i + 1 >= database.factionTypeFilter.Count)
+                {
+                    Console.WriteLine(i + 2 + ". <--Back");
+                    Console.Write("Choose Filter: ");
+                }
+            }
+            consoleInput = Console.ReadLine();
+            if (consoleInput == "1")
+            {
+                database.AddFilter(database.factionTypeFilter[0]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "2")
+            {
+                database.AddFilter(database.factionTypeFilter[1]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "3")
+            {
+                database.AddFilter(database.factionTypeFilter[2]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "4")
+            {
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else
+            {
+                ChooseFactionTypeFilter();
+            }
+        }
+
+        public void ChooseAppearanceTypeFilter()
+        {
+            Console.Clear();
+            Console.WriteLine("\n---" + database.filterMenus[1] + "---");
+            for (int i = 0; i < database.appearanceFilter.Count; i++)
+            {
+                if (database.appearanceFilter[i].Contains(database.appearanceFilter[i]))
+                {
+                    database.RemoveFilter(database.appearanceFilter[i]);
+                }
+                Console.WriteLine(i + 1 + ". " + database.appearanceFilter[i]);
+                if (i + 1 >= database.appearanceFilter.Count)
+                {
+                    Console.WriteLine(i + 2 + ". <--Back");
+                    Console.Write("Choose Filter: ");
+                }
+            }
+            consoleInput = Console.ReadLine();
+            if (consoleInput == "1")
+            {
+                database.AddFilter(database.appearanceFilter[0]);
+                database.RemoveFilter(database.appearanceFilter[1]);
+                database.RemoveFilter(database.appearanceFilter[2]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "2")
+            {
+                database.AddFilter(database.appearanceFilter[1]);
+                database.RemoveFilter(database.appearanceFilter[0]);
+                database.RemoveFilter(database.appearanceFilter[2]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "3")
+            {
+                database.AddFilter(database.appearanceFilter[2]);
+                database.RemoveFilter(database.appearanceFilter[0]);
+                database.RemoveFilter(database.appearanceFilter[1]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "4")
+            {
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else
+            {
+                ChooseAppearanceTypeFilter();
+            }
+        }
+
+        public void ChooseHomeWorldType()
+        {
+            Console.Clear();
+            Console.WriteLine("\n---" + database.filterMenus[2] + "---");
+            for (int i = 0; i < database.homeWorldTypeFilter.Count; i++)
+            {
+                if (database.homeWorldTypeFilter[i].Contains(database.homeWorldTypeFilter[i]))
+                {
+                    database.RemoveFilter(database.homeWorldTypeFilter[i]);
+                }
+                Console.WriteLine(i + 1 + ". " + database.homeWorldTypeFilter[i]);
+                if (i + 1 >= database.homeWorldTypeFilter.Count)
+                {
+                    Console.WriteLine(i + 2 + ". <--Back");
+                    Console.Write("Choose Filter: ");
+                }
+            }
+            consoleInput = Console.ReadLine();
+            if (consoleInput == "1")
+            {
+                database.AddFilter(database.homeWorldTypeFilter[0]);
+                database.RemoveFilter(database.homeWorldTypeFilter[1]);
+                database.RemoveFilter(database.homeWorldTypeFilter[2]);
+                database.RemoveFilter(database.homeWorldTypeFilter[3]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "2")
+            {
+                database.AddFilter(database.homeWorldTypeFilter[1]);
+                database.RemoveFilter(database.homeWorldTypeFilter[0]);
+                database.RemoveFilter(database.homeWorldTypeFilter[2]);
+                database.RemoveFilter(database.homeWorldTypeFilter[3]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "3")
+            {
+                database.AddFilter(database.homeWorldTypeFilter[2]);
+                database.RemoveFilter(database.homeWorldTypeFilter[0]);
+                database.RemoveFilter(database.homeWorldTypeFilter[1]);
+                database.RemoveFilter(database.homeWorldTypeFilter[3]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "4")
+            {
+                database.AddFilter(database.homeWorldTypeFilter[3]);
+                database.RemoveFilter(database.homeWorldTypeFilter[0]);
+                database.RemoveFilter(database.homeWorldTypeFilter[1]);
+                database.RemoveFilter(database.homeWorldTypeFilter[2]);
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else if (consoleInput == "5")
+            {
+                _databaseMenus = DatabaseMenus.DatabaseSearchEngineFilters;
+                DatabaseEngine();
+            }
+            else
+            {
+                ChooseAppearanceTypeFilter();
             }
         }
 
@@ -513,7 +1009,14 @@ namespace Database
         public enum DatabaseMenus
         {
             DatabaseSearchEngine,
-            FactionOptions
+            FactionOptions,
+            DatabaseSearchEngineFilters
+        }
+        public enum FilterMenus
+        {
+            FactionTypeFilterMenu,
+            AppearanceTypeFilterMenu,
+            HomeWorldTypeFilterMenu
         }
     }
 }
